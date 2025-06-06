@@ -36,4 +36,17 @@ components**.
 When initializing the web context, Spring scans your packages, finds these
 classes, and **loads them as beans in the context**. Then, we can use **dependency injection
 to wire (or inject) these beans** and, for example, use services from our presentation layer
-(controllers). W
+(controllers).
+
+## Useful testing annotations
+
+* **Spy**
+  It is used to create a "spy" object, which is a partial mock of a real object.
+  The main use cases for this annotation are:
+  1. **Partial Mocking**: When we want to mock only certain methods of an object, while allowing the rest of th
+    object's methods to behave as the original implementation. This is useful when we want to test a specific
+    behavior of an object without having to mock the entire object.
+  2. **Verifying behavior**: With a spy, we can verify the behavior of the real object, such as the number of times
+     method was called, the arguments passed to the method, etc.
+  3. **Stubbing behavior**: We can also stub the behavior of specific methods on the real object, while allowing
+     the rest of the object to behave as the original implementation.

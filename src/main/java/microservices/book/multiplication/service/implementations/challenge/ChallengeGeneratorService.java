@@ -1,0 +1,31 @@
+package microservices.book.multiplication.service.implementations.challenge;
+
+import microservices.book.multiplication.domain.Challenge;
+import microservices.book.multiplication.service.interfaces.challenge.IChallengeGeneratorService;
+import org.springframework.stereotype.Service;
+
+import java.util.Random;
+
+@Service
+public class ChallengeGeneratorService implements IChallengeGeneratorService {
+
+    private final Random random;
+
+    public ChallengeGeneratorService() {
+        this.random = new Random();
+    }
+
+    /**
+     * This second constructor make the class testable
+     * accepting a random object as parameter.
+     * @param random
+     */
+    public ChallengeGeneratorService(Random random) {
+        this.random = random;
+    }
+
+    @Override
+    public Challenge randomChallenge() {
+        return null;
+    }
+}
