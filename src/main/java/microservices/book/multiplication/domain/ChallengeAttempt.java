@@ -1,9 +1,6 @@
 package microservices.book.multiplication.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 /**
  * Identifies the attempt from a {@link User} to solve a challenge.
@@ -13,6 +10,7 @@ import lombok.ToString;
  * simply generate new challenges "on the fly" and copy them here to keep
  * the data structures simple.
  */
+@Builder
 @Getter
 @ToString
 @EqualsAndHashCode
