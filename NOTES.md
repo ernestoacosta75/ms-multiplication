@@ -49,4 +49,19 @@ to wire (or inject) these beans** and, for example, use services from our presen
   2. **Verifying behavior**: With a spy, we can verify the behavior of the real object, such as the number of times
      method was called, the arguments passed to the method, etc.
   3. **Stubbing behavior**: We can also stub the behavior of specific methods on the real object, while allowing
-     the rest of the object to behave as the original implementation.
+     the rest of the object to behave as the original implementation
+
+* **@ExtendWith(SpringExtension.class)**: Makes sure that JUnit 5 test loads the extensions for Spring so we can use a test context.
+
+* **@AutoConfigureJsonTesters**: Tells Spring to configure beans of type JacksonTester from some fields we declare in the test. 
+  A JacksonTester may be used to serialize and deserialize objects using the same configuration (ex.: ObjectMapper) as the app
+  would do in runtime.
+
+* **@WebMvcTest**: With the controller class as parameter, makes Spring treates this as a presentation layer. Thus, it will load only
+  the relevant configuration around the controller: validation, serializers, security, error handlers, etc.
+
+* **@MockBean**: Allow to mock other layers and beans we're not testing. The expected return values within the test methods, is set
+  using *BDDMockito's given()*.
+
+* **MockMvc**: It's what we use in Spring to simulate requests to the presentation layer when we make a test that doesn't load a real server.
+  It's provided by the test context so we can inject it in our tests.
