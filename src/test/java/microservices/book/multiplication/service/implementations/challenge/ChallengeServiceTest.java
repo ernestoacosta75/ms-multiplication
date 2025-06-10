@@ -6,7 +6,6 @@ import microservices.book.multiplication.service.interfaces.challenge.IChallenge
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.BDDAssertions.then;
 
 class ChallengeServiceTest {
