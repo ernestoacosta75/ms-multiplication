@@ -20,7 +20,7 @@ public class ChallengeService implements IChallengeService {
         // Building the domain object. Null id for now
         ChallengeAttempt checkedAttempt = ChallengeAttempt.builder()
                 .id(null)
-                .userId(user.getId())
+                .user(user)
                 .factorA(challengeAttemptDto.getFactorA())
                 .factorB(challengeAttemptDto.getFactorB())
                 .correct(isCorrect)

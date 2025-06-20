@@ -46,7 +46,7 @@ class ChallengeAttemptControllerTest {
         User user = new User(1L, "john");
         long attemptId = 5L;
         ChallengeAttemptDto attemptDto = new ChallengeAttemptDto(50, 70, "john", 3500);
-        ChallengeAttempt expectedResponse = new ChallengeAttempt(attemptId, user.getId(), 50, 70, 3500, true);
+        ChallengeAttempt expectedResponse = new ChallengeAttempt(attemptId, user, 50, 70, 3500, true);
 
         given(challengeService
                 .verifyAttempt(eq(attemptDto)))
@@ -54,9 +54,9 @@ class ChallengeAttemptControllerTest {
 
         // when
         MockHttpServletResponse response = mvc.perform(
-                post("/attempts")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonRequestAttempt.write(attemptDto).getJson()))
+                        post("/attempts")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(jsonRequestAttempt.write(attemptDto).getJson()))
                 .andReturn()
                 .getResponse();
 
@@ -64,5 +64,22 @@ class ChallengeAttemptControllerTest {
         then(response.getStatus()).isEqualTo(HttpStatus.OK.value());
         then(response.getContentAsString())
                 .isEqualTo(jsonResultAttempt.write(expectedResponse).getJson());
+    }
+
+    @Test
+    void postInvalidResult() throws Exception {
+        // given
+        ChallengeAttemptDto attemptDto = new ChallengeAttemptDto(2000, -70, "john", 1);
+
+        // when
+        MockHttpServletResponse response = mvc.perform(
+                        post("/attempts")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(jsonRequestAttempt.write(attemptDto).getJson()))
+                .andReturn()
+                .getResponse();
+
+        // then
+        then(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
 }
