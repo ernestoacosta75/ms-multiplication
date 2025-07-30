@@ -65,3 +65,447 @@ to wire (or inject) these beans** and, for example, use services from our presen
 
 * **MockMvc**: It's what we use in Spring to simulate requests to the presentation layer when we make a test that doesn't load a real server.
   It's provided by the test context so we can inject it in our tests.
+
+# Implementing Microservices using Hexagonal Architecture
+
+The hexagonal architecture allows you to have a **separation of concerns**. 
+In short, it says the application and domain layer contains core business logic. Therefore, **it should not depend on infrastructure concerns such as database and messaging**. You are free to change your technology choices while still keeping business logic intact.
+
+Hexagonal architecture is also known as **ports and adapters**. 
+This architecture defines ports (**interfaces**) in the **application/domain** layer and provides the implementation in different layers. The **adapters** will be the implementation of the **ports**. 
+Therefore, the application layer is completely unaware of implementation. This allows you to change, for instance, the database without changing business logic.
+
+In Hexagonal architecture, we can organize code in **layers per package** approach as:
+
+**Resource** (uses **Application**)
+* Controller
+* Adapter
+
+**Application**
+* Commands
+* Domain
+* Factory
+* Query
+* Service
+
+**Infrastructure** (uses **Application**)
+* Gateway
+* Adapter
+
+**Persistence** (uses **Application**)
+* Repository
+* Adapter
+
+**Domain**
+* Service
+* Factory
+* Model
+* Repository
+
+### Adapters:
+Adapters are responsible for converting data between the external world and the internal application core (domain).
+There are two main types of adapters:
+
+**a) Primary (Driving) Adapters**: Convert external requests into domain operations
+* REST Controllers
+* GraphQL Resolvers
+* Message Listeners 
+
+** b) Secondary (Driven) Adapters**: Convert domain operations to external system interactions
+
+* Database Repositories
+* External API Clients
+* Message Producers
+
+### Gateways:
+* Gateways are interfaces that define contracts for external system interactions
+* They abstract the implementation details of external system communication
+* Typically used for database access, external service calls, etc.
+
+
+
+## Package Descriptions
+
+### Domain Layer
+- `model`: Contains core domain entities (ex.: **User.java**)
+- `service`: Domain-specific business logic (ex.: **UserDomainService.java**)
+- `repository`: Domain repository interfaces (ex.: **IUserRepository.java**)
+
+### Application Layer
+- `service`: Application-level services (ex.: **UserApplicationService.java**)
+- `command`: Command objects for creating/modifying entities (ex.: **CreateUserCommand.java**)
+- `query`: Query services for retrieving data (ex.: **UserQueryService.java**)
+
+### Infrastructure Layer
+- `adapter`: External service adapters (ex.: **ExternalUserServiceAdapter.java**)
+- `gateway`: Service gateways for external integrations (ex.: **ExternalUserServiceGateway.java**)
+
+### Persistence Layer
+- `adapter`: Persistence-specific adapters (ex.: **UserPersistenceAdapter.java**)
+- `repository`: JPA repository implementations (ex.: **UserJpaRepository.java**)
+
+### Resource Layer
+- `adapter`: REST-specific adapters (ex.: **UserRestAdapter.java**)
+- `controller`: REST controllers for handling HTTP requests (ex.: **UserController.java**)
+
+## Example implementation
+
+1. Domain Model:
+
+```
+package com.example.usermanagement.domain.model;
+
+public class User {
+    private Long id;
+    private String username;
+    private String email;
+
+    // Constructors, getters, setters
+}
+```
+2. Domain Service:
+```
+package com.example.usermanagement.domain.service;
+
+import com.example.usermanagement.domain.model.User;
+import com.example.usermanagement.domain.repository.IUserRepository;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserDomainService {
+    private final IUserRepository userRepository;
+
+    public UserDomainService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public User createUser(User user) {
+        // Domain-specific validation logic
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            throw new IllegalArgumentException("Username already exists");
+        }
+
+        // Business rules and validations
+        validateUserCreation(user);
+
+        return userRepository.save(user);
+    }
+
+    private void validateUserCreation(User user) {
+        // Complex domain-specific validation rules
+        if (user.getUsername().length() < 3) {
+            throw new IllegalArgumentException("Username must be at least 3 characters long");
+        }
+    }
+
+    public User updateUserStatus(Long userId, boolean active) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+        
+        // Domain-specific status update logic
+        user.setActive(active);
+        return userRepository.save(user);
+    }
+}
+```
+
+3. Domain Repository Interface:
+```
+package com.example.usermanagement.domain.repository;
+
+import com.example.usermanagement.domain.model.User;
+import java.util.Optional;
+
+public interface IUserRepository {
+    User save(User user);
+    Optional<User> findByUsername(String username);
+}
+```
+
+4. Application Command:
+```
+package com.example.usermanagement.application.command;
+
+public class CreateUserCommand {
+    private String username;
+    private String email;
+
+    // Constructors, getters, setters
+}
+```
+
+5. Application Service:
+```
+package com.example.usermanagement.application.service;
+
+import com.example.usermanagement.domain.model.User;
+import com.example.usermanagement.domain.repository.IUserRepository;
+import com.example.usermanagement.application.command.CreateUserCommand;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserApplicationService {
+    private final IUserRepository userRepository;
+
+    public UserApplicationService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public User createUser(CreateUserCommand command) {
+        User user = new User();
+        user.setUsername(command.getUsername());
+        user.setEmail(command.getEmail());
+        return userRepository.save(user);
+    }
+}
+```
+6. Infrastructure Adapter:
+```
+package com.example.usermanagement.infrastructure.adapter;
+
+import com.example.usermanagement.domain.model.User;
+import com.example.usermanagement.infrastructure.gateway.ExternalUserServiceGateway;
+import org.springframework.stereotype.Component;
+
+@Component
+public class ExternalUserServiceAdapter {
+    private final ExternalUserServiceGateway externalUserServiceGateway;
+
+    public ExternalUserServiceAdapter(ExternalUserServiceGateway externalUserServiceGateway) {
+        this.externalUserServiceGateway = externalUserServiceGateway;
+    }
+
+    public boolean validateUser(User user) {
+        // Adapt domain model to external service validation
+        return externalUserServiceGateway.validateUserExternal(user.getUsername());
+    }
+
+    public void syncUserToExternalSystem(User user) {
+        // Additional transformation or validation before syncing
+        if (user.isActive()) {
+            externalUserServiceGateway.syncUserToExternalSystem(user);
+        }
+    }
+}
+```
+7. Infrastructure Gateway:
+```
+package com.example.usermanagement.infrastructure.gateway;
+
+import com.example.usermanagement.domain.model.User;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.HttpMethod;
+
+@Component
+public class ExternalUserServiceGateway {
+    private final RestTemplate restTemplate;
+
+    @Value("${external.user.service.url}")
+    private String externalUserServiceUrl;
+
+    @Value("${external.user.service.api.key}")
+    private String apiKey;
+
+    public ExternalUserServiceGateway(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
+    // Validation Request DTO
+    public static class ValidationRequest {
+        private String username;
+
+        public ValidationRequest(String username) {
+            this.username = username;
+        }
+
+        public String getUsername() { return username; }
+        public void setUsername(String username) { this.username = username; }
+    }
+
+    // Validation Response DTO
+    public static class ValidationResponse {
+        private boolean valid;
+        private String message;
+
+        public boolean isValid() { return valid; }
+        public void setValid(boolean valid) { this.valid = valid; }
+        public String getMessage() { return message; }
+        public void setMessage(String message) { this.message = message; }
+    }
+
+    // User Sync Request DTO
+    public static class UserSyncRequest {
+        private String username;
+        private String email;
+        private String firstName;
+        private String lastName;
+
+        public String getUsername() { return username; }
+        public void setUsername(String username) { this.username = username; }
+        public String getEmail() { return email; }
+        public void setEmail(String email) { this.email = email; }
+        public String getFirstName() { return firstName; }
+        public void setFirstName(String firstName) { this.firstName = firstName; }
+        public String getLastName() { return lastName; }
+        public void setLastName(String lastName) { this.lastName = lastName; }
+    }
+
+    // External User Details DTO
+    public static class ExternalUserDetails {
+        private String username;
+        private String email;
+        private String externalId;
+        private boolean verified;
+
+        public String getUsername() { return username; }
+        public void setUsername(String username) { this.username = username; }
+        public String getEmail() { return email; }
+        public void setEmail(String email) { this.email = email; }
+        public String getExternalId() { return externalId; }
+        public void setExternalId(String externalId) { this.externalId = externalId; }
+        public boolean isVerified() { return verified; }
+        public void setVerified(boolean verified) { this.verified = verified; }
+    }
+
+    // Custom Exception for External Service Sync
+    public static class ExternalServiceSyncException extends RuntimeException {
+        public ExternalServiceSyncException(String message, Throwable cause) {
+            super(message, cause);
+        }
+    }
+
+    // Method to validate user with external service
+    public boolean validateUserExternal(String username) {
+        try {
+            String validationUrl = externalUserServiceUrl + "/validate";
+            
+            // Prepare headers
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.set("X-API-KEY", apiKey);
+
+            // Prepare request body
+            ValidationRequest request = new ValidationRequest(username);
+            HttpEntity<ValidationRequest> entity = new HttpEntity<>(request, headers);
+
+            // Make the call
+            ResponseEntity<ValidationResponse> response = restTemplate.postForEntity(
+                validationUrl, 
+                entity, 
+                ValidationResponse.class
+            );
+
+            return response.getBody() != null && response.getBody().isValid();
+        } catch (Exception e) {
+            // Log the error            
+```
+
+8. Persistence Adapter:
+```
+package com.example.usermanagement.persistence.adapter;
+
+import com.example.usermanagement.domain.model.User;
+import com.example.usermanagement.domain.repository.IUserRepository;
+import com.example.usermanagement.persistence.repository.UserJpaRepository;
+import org.springframework.stereotype.Component;
+
+@Component
+public class UserPersistenceAdapter implements IUserRepository {
+    private final UserJpaRepository jpaRepository;
+
+    public UserPersistenceAdapter(UserJpa
+```
+
+9. Resource Adapter:
+```
+package com.example.usermanagement.resource.adapter;
+
+import com.example.usermanagement.application.service.UserApplicationService;
+import com.example.usermanagement.domain.model.User;
+import com.example.usermanagement.resource.dto.UserRequestDTO;
+import com.example.usermanagement.resource.dto.UserResponseDTO;
+import org.springframework.stereotype.Component;
+
+@Component
+public class UserRestAdapter {
+    private final UserApplicationService userApplicationService;
+
+    public UserRestAdapter(UserApplicationService userApplicationService) {
+        this.userApplicationService = userApplicationService;
+    }
+
+    // Convert DTO to Domain Model and process creation
+    public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
+        // Map DTO to Domain Model
+        User user = mapToUserDomain(userRequestDTO);
+
+        // Delegate to application service
+        User createdUser = userApplicationService.createUser(user);
+
+        // Map created user back to response DTO
+        return mapToUserResponseDTO(createdUser);
+    }
+
+    // Convert DTO to Domain Model
+    private User mapToUserDomain(UserRequestDTO dto) {
+        User user = new User();
+        user.setUsername(dto.getUsername());
+        user.setEmail(dto.getEmail());
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        return user;
+    }
+
+    // Convert Domain Model to Response DTO
+    private UserResponseDTO mapToUserResponseDTO(User user) {
+        UserResponseDTO dto = new UserResponseDTO();
+        dto.setId(user.getId());
+        dto.setUsername(user.getUsername());
+        dto.setEmail(user.getEmail());
+        dto.setFirstName(user.getFirstName());
+        dto.setLastName(user.getLastName());
+        return dto;
+    }
+
+    // Additional methods for other operations
+    public UserResponseDTO updateUser(Long userId, UserRequestDTO userRequestDTO) {
+        // Similar pattern of conversion and delegation
+        User userToUpdate = mapToUserDomain(userRequestDTO);
+        userToUpdate.setId(userId);
+
+        User updatedUser = userApplicationService.updateUser(userToUpdate);
+        return mapToUserResponseDTO(updatedUser);
+    }
+
+    public void deleteUser(Long userId) {
+        userApplicationService.deleteUser(userId);
+    }
+
+    // Validation method that can be used before processing
+    public boolean validateUserRequest(UserRequestDTO userRequestDTO) {
+        // Additional validation logic specific to REST layer
+        return userRequestDTO != null 
+               && userRequestDTO.getUsername() != null 
+               && !userRequestDTO.getUsername().isEmpty()
+               && userRequestDTO.getEmail() != null 
+               && userRequestDTO.getEmail().contains("@");
+    }
+}
+```
+
+# Adding CORS configuration to the Spring Boot App
+
+By default, your browser blocks requests that try to access resources in a different
+domain than the one in which your front end is located. This is to avoid that a malicious
+page in your browser has access to data in a different page, and it’s called the same-origin
+policy. In our case, we’re running both the front end and the back end in localhost, but
+they run on different ports, so they are considered different origins.
+To fix this, we’re going to enable **cross-origin
+resource sharing** (CORS), **a security policy that can be enabled on the server side to
+allow our front end to work with our REST API from a different origin**.

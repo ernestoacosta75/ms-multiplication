@@ -1,6 +1,9 @@
 spring:
   application:
     name: multiplication
+  threads:
+    virtual:
+      enabled: true
 server:
   error:
     include-message: always
