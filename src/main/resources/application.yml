@@ -4,6 +4,15 @@ spring:
   threads:
     virtual:
       enabled: true
+  datasource:
+    url: jdbc:h2:file:~/multiplication;DB_CLOSE_ON_EXIT=FALSE
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
 server:
   error:
     include-message: always

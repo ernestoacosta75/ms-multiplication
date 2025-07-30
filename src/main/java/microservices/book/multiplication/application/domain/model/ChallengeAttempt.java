@@ -18,8 +18,9 @@ import lombok.*;
 public class ChallengeAttempt {
     private Long id;
     private User user;
-    private int factorA;
-    private int factorB;
+/*    private int factorA;
+    private int factorB;*/
+    private Challenge challenge;
     private int resultAttempt;
     private boolean correct;
 }
