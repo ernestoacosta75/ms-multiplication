@@ -17,3 +17,8 @@ server:
   error:
     include-message: always
     include-binding-errors: always
+
+# SWAGGER
+springdoc:
+  swagger-ui-path: /swagger-ui.html
+  api-docs.path: /v1/api/docs

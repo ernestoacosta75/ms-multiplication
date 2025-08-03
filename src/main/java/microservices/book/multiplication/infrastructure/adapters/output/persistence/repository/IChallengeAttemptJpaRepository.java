@@ -2,6 +2,7 @@ package microservices.book.multiplication.infrastructure.adapters.output.persist
 
 import microservices.book.multiplication.infrastructure.adapters.output.persistence.entity.ChallengeAttemptEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 
-public interface IChallengeAttemptJpaRepository extends JpaRepository<ChallengeAttemptEntity, Long> {
+public interface IChallengeAttemptJpaRepository extends CrudRepository<ChallengeAttemptEntity, Long> {
 }

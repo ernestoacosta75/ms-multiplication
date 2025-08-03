@@ -2,7 +2,7 @@ package microservices.book.multiplication.infrastructure.adapters.config;
 
 import lombok.Setter;
 import microservices.book.multiplication.application.ports.input.command.IChallengeAttemptCommand;
-import microservices.book.multiplication.application.ports.output.IChallengeAttemptRepository;
+import microservices.book.multiplication.application.ports.output.persistence.IChallengeAttemptRepository;
 import microservices.book.multiplication.application.factory.IChallengeAttemptFactory;
 import microservices.book.multiplication.application.factory.impl.ChallengeAttemptFactory;
 import microservices.book.multiplication.application.ports.input.query.IChallengeAttemptQuery;
