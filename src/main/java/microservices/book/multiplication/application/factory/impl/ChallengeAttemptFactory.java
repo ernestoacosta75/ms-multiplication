@@ -1,8 +1,8 @@
 package microservices.book.multiplication.application.factory.impl;
 
-import microservices.book.multiplication.application.command.IChallengeAttemptCommand;
+import microservices.book.multiplication.application.ports.input.command.IChallengeAttemptCommand;
 import microservices.book.multiplication.application.factory.IChallengeAttemptFactory;
-import microservices.book.multiplication.application.query.IChallengeAttemptQuery;
+import microservices.book.multiplication.application.ports.input.query.IChallengeAttemptQuery;
 
 public class ChallengeAttemptFactory implements IChallengeAttemptFactory {
 

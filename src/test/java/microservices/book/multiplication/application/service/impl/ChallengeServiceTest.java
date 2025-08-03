@@ -1,17 +1,17 @@
 package microservices.book.multiplication.application.service.impl;
 
 import microservices.book.multiplication.application.factory.IChallengeAttemptFactory;
-import microservices.book.multiplication.application.service.IChallengeService;
-import microservices.book.multiplication.common.config.AppConfig;
-import microservices.book.multiplication.resource.model.ChallengeAttemptRequest;
-import microservices.book.multiplication.resource.model.ChallengeAttemptResponse;
+import microservices.book.multiplication.application.ports.input.IChallengeService;
+import microservices.book.multiplication.domain.service.ChallengeService;
+import microservices.book.multiplication.infrastructure.adapters.config.AppConfig;
+import microservices.book.multiplication.infrastructure.adapters.input.rest.model.ChallengeAttemptRequest;
+import microservices.book.multiplication.infrastructure.adapters.input.rest.model.ChallengeAttemptResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.BDDAssertions.then;
 
 @SpringBootTest

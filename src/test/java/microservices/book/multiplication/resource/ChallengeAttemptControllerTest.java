@@ -1,9 +1,10 @@
 package microservices.book.multiplication.resource;
 
-import microservices.book.multiplication.application.domain.model.User;
-import microservices.book.multiplication.application.service.IChallengeService;
-import microservices.book.multiplication.resource.model.ChallengeAttemptRequest;
-import microservices.book.multiplication.resource.model.ChallengeAttemptResponse;
+import microservices.book.multiplication.domain.model.User;
+import microservices.book.multiplication.application.ports.input.IChallengeService;
+import microservices.book.multiplication.infrastructure.adapters.input.rest.ChallengeAttemptController;
+import microservices.book.multiplication.infrastructure.adapters.input.rest.model.ChallengeAttemptRequest;
+import microservices.book.multiplication.infrastructure.adapters.input.rest.model.ChallengeAttemptResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,6 @@ import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @AutoConfigureJsonTesters

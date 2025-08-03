@@ -1,7 +1,8 @@
 package microservices.book.multiplication.application.service.impl;
 
-import microservices.book.multiplication.application.domain.model.Challenge;
-import microservices.book.multiplication.application.service.IChallengeGeneratorService;
+import microservices.book.multiplication.domain.model.Challenge;
+import microservices.book.multiplication.application.ports.input.IChallengeGeneratorService;
+import microservices.book.multiplication.domain.service.ChallengeGeneratorService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,7 +12,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Random;
 
 import static org.assertj.core.api.BDDAssertions.then;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
