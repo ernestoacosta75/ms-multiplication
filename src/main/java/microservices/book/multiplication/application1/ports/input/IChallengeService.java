@@ -1,6 +1,6 @@
 package microservices.book.multiplication.application.ports.input;
 
-import microservices.book.multiplication.infrastructure.adapters.input.rest.model.ChallengeAttemptRequest;
+import microservices.book.multiplication.application.ports.input.command.CreateChallengeAttemptCommand1;
 import microservices.book.multiplication.infrastructure.adapters.input.rest.model.ChallengeAttemptResponse;
 
 public interface IChallengeService {
@@ -10,5 +10,5 @@ public interface IChallengeService {
      * @param challengeAttemptRequest
      * @return the resulting {@link ChallengeAttemptResponse} object
      */
-    ChallengeAttemptResponse verifyAttempt(ChallengeAttemptRequest challengeAttemptRequest);
+    ChallengeAttemptResponse verifyAttempt(CreateChallengeAttemptCommand1 createChallengeAttemptCommand);
 }

@@ -1,5 +1,6 @@
 package microservices.book.multiplication.resource;
 
+import microservices.book.multiplication.application.ports.input.command.CreateChallengeAttemptCommand1;
 import microservices.book.multiplication.domain.model.User;
 import microservices.book.multiplication.application.ports.input.IChallengeService;
 import microservices.book.multiplication.infrastructure.adapters.input.rest.ChallengeAttemptController;
@@ -35,7 +36,7 @@ class ChallengeAttemptControllerTest {
     private MockMvc mvc;
 
     @Autowired
-    private JacksonTester<ChallengeAttemptRequest> jsonRequestAttempt;
+    private JacksonTester<CreateChallengeAttemptCommand1> jsonRequestAttempt;
 
     @Autowired
     private JacksonTester<ChallengeAttemptResponse> jsonResultAttempt;
@@ -46,18 +47,23 @@ class ChallengeAttemptControllerTest {
         // given
         User user = new User(1L, "john");
         long attemptId = 5L;
-        ChallengeAttemptRequest attemptRequest = new ChallengeAttemptRequest(50, 70, "john", 3500);
+
+        CreateChallengeAttemptCommand1 createChallengeAttemptCommand = CreateChallengeAttemptCommand1.builder()
+                .commandName("ChallengeAttemptCommand")
+                .challengeAttemptRequest(new ChallengeAttemptRequest(50, 70, "john", 3500))
+                .build();
+
         ChallengeAttemptResponse expectedResponse = new ChallengeAttemptResponse(attemptId, user, 50, 70, 3500, true);
 
         given(challengeService
-                .verifyAttempt(eq(attemptRequest)))
+                .verifyAttempt(eq(verifyAttemptQuery)))
                 .willReturn(expectedResponse);
 
         // when
         MockHttpServletResponse response = mvc.perform(
                         post("/attempts")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(jsonRequestAttempt.write(attemptRequest).getJson()))
+                                .content(jsonRequestAttempt.write(verifyAttemptQuery).getJson()))
                 .andReturn()
                 .getResponse();
 

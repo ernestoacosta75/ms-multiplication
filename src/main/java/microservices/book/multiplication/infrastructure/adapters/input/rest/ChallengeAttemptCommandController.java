@@ -1,9 +1,10 @@
 package microservices.book.multiplication.infrastructure.adapters.input.rest;
 
+import io.swagger.annotations.Api;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import microservices.book.multiplication.infrastructure.adapters.input.rest.model.ChallengeAttemptRequest;
+import microservices.book.multiplication.application.ports.input.command.CreateChallengeAttemptCommand1;
 import microservices.book.multiplication.infrastructure.adapters.input.rest.model.ChallengeAttemptResponse;
 import microservices.book.multiplication.application.ports.input.IChallengeService;
 import org.springframework.http.ResponseEntity;
@@ -20,12 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
+@Api(value = "Challenge Attempt Commands", description = "Challenge Attempt Commands API")
 @RequestMapping("/attempts")
-public class ChallengeAttemptController {
+public class ChallengeAttemptCommandController {
     private final IChallengeService challengeService;
 
     @PostMapping
-    ResponseEntity<ChallengeAttemptResponse> postResult(@RequestBody @Valid ChallengeAttemptRequest challengeAttemptRequest) {
-        return ResponseEntity.ok(challengeService.verifyAttempt(challengeAttemptRequest));
+    ResponseEntity<ChallengeAttemptResponse> postResult(@RequestBody @Valid CreateChallengeAttemptCommand1 createChallengeAttemptCommand) {
+        // ChallengeAttemptRequest challengeAttemptRequest
+        return ResponseEntity.ok(challengeService.verifyAttempt(createChallengeAttemptCommand));
     }
 }

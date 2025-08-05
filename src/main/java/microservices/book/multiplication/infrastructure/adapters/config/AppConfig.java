@@ -1,16 +1,13 @@
 package microservices.book.multiplication.infrastructure.adapters.config;
 
 import lombok.Setter;
-import microservices.book.multiplication.application.ports.input.command.IChallengeAttemptCommand;
-import microservices.book.multiplication.application.ports.output.persistence.IChallengeAttemptRepository;
-import microservices.book.multiplication.application.factory.IChallengeAttemptFactory;
-import microservices.book.multiplication.application.factory.impl.ChallengeAttemptFactory;
-import microservices.book.multiplication.application.ports.input.query.IChallengeAttemptQuery;
-import microservices.book.multiplication.application.query.impl.ChallengeAttemptQuery;
+import microservices.book.multiplication.application.ports.output.persistence.repository.IChallengeAttemptRepository;
+import microservices.book.multiplication.application.ports.output.persistence.repository.IUserRepository;
 import microservices.book.multiplication.infrastructure.adapters.output.persistence.repository.ChallengeAttemptRepository;
 import microservices.book.multiplication.infrastructure.adapters.output.persistence.repository.IChallengeAttemptJpaRepository;
+import microservices.book.multiplication.infrastructure.adapters.output.persistence.repository.IUserJpaRepository;
+import microservices.book.multiplication.infrastructure.adapters.output.persistence.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
@@ -20,22 +17,14 @@ public class AppConfig {
     @Autowired
     private IChallengeAttemptJpaRepository challengeAttemptJpaRepository;
 
-    @Bean
-    public IChallengeAttemptCommand challengeAttemptCommand() {
-        return new ChallengeAttemptCommand();
-    }
-
-    @Bean
-    public IChallengeAttemptQuery challengeAttemptQuery() {
-        return new ChallengeAttemptQuery();
-    }
-
-    @Bean
-    public IChallengeAttemptFactory challengeAttemptFactory() {
-        return new ChallengeAttemptFactory(challengeAttemptCommand(), challengeAttemptQuery());
-    }
+    @Autowired
+    private IUserJpaRepository userJpaRepository;
 
     private IChallengeAttemptRepository challengeAttemptRepository() {
         return new ChallengeAttemptRepository(challengeAttemptJpaRepository);
+    }
+
+    private IUserRepository userRepository() {
+        return new UserRepository(userJpaRepository);
     }
 }

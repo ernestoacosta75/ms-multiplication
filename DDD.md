@@ -1,3 +1,5 @@
+<img src="hexagonal-architecture-ddd.png">
+
 # Core Concepts
 
 1. Core Doman (Center of the Hexagon)
