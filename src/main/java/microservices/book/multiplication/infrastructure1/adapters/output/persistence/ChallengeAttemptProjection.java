@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 /**
  * A projection is a dedicated class that will match the DB operations for every received event.
  * The handlers are defined for every emitted Event.
+ *
+ * With the @EventHandler annotation we mark a method as a handler for an specific Event emitted.
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -28,8 +30,8 @@ public class ChallengeAttemptProjection {
         ChallengeAttemptEntity challengeAttemptEntity = new ChallengeAttemptEntity(
                 event.getId(),
                 UserEntityMapper.MAPPER.map(event.getUser()),
-                event.getChallenge().getFactorA(),
-                event.getChallenge().getFactorB(),
+                event.getFactorA(),
+                event.getFactorB(),
                 event.getResultAttempt(),
                 event.isCorrect()
         );

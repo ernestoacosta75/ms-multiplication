@@ -18,7 +18,12 @@ server:
     include-message: always
     include-binding-errors: always
 
-# SWAGGER
+# Swagger
 springdoc:
   swagger-ui-path: /swagger-ui.html
   api-docs.path: /v1/api/docs
+
+# Axon
+axon:
+  serializer:
+    general: jackson

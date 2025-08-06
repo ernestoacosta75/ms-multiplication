@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import microservices.book.multiplication.application.ports.input.command.CreateChallengeAttemptCommand;
 import microservices.book.multiplication.domain.event.ChallengeAttemptCreatedEvent;
-import microservices.book.multiplication.domain.model.Challenge;
 import microservices.book.multiplication.domain.model.User;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
@@ -15,18 +14,23 @@ import org.axonframework.spring.stereotype.Aggregate;
 
 /**
  * The @Aggregate annotation informs Axon's auto configurer for spring that this class is an Aggregate instance.
+ *
  * The @AggregateIdentifier identifies the field as the identifier of the Aggregate.
+ *
+ * The @CommandHandler annotation will mark a method as a Handler of an specific Command.
  */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Aggregate
-public class ChallengeAttemptAggregate {
+public class ChallengeAttemptAxonAggregate {
     @AggregateIdentifier
     private Long id;
     private User user;
-    private Challenge challenge;
+    private int factorA;
+    private int factorB;
     private int resultAttempt;
+    private int guess;
     private boolean correct;
 
     /**
@@ -35,14 +39,21 @@ public class ChallengeAttemptAggregate {
      * @param command
      */
     @CommandHandler
-    public ChallengeAttemptAggregate(CreateChallengeAttemptCommand command) {
+    public ChallengeAttemptAxonAggregate(CreateChallengeAttemptCommand command) {
+        /**
+         * boolean isCorrect = createChallengeAttemptCommand.challengeAttemptRequest().getGuess() ==
+         *                 createChallengeAttemptCommand.challengeAttemptRequest().getFactorA() * createChallengeAttemptCommand.challengeAttemptRequest().getFactorB();
+         */
+        boolean correct = command.getGuess() == command.getFactorA() * command.getFactorB();
         AggregateLifecycle.apply(
                 new ChallengeAttemptCreatedEvent(
                         command.getAggregateId(),
                         command.getUser(),
-                        command.getChallenge(),
-                        command.getResultAttempt(),
-                        command.isCorrect()
+                        command.getFactorA(),
+                        command.getFactorB(),
+                        command.getFactorA() * command.getFactorB(),
+                        command.getGuess(),
+                        correct
                 )
         );
     }
@@ -55,8 +66,10 @@ public class ChallengeAttemptAggregate {
     public void on(ChallengeAttemptCreatedEvent event) {
         this.id = event.getId();
         this.user = event.getUser();
-        this.challenge = event.getChallenge();
+        this.factorA = event.getFactorA();
+        this.factorB = event.getFactorB();
         this.resultAttempt = event.getResultAttempt();
+        this.guess = event.getUserGuess();
         this.correct = event.isCorrect();
     }
 }

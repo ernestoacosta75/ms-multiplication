@@ -13,7 +13,7 @@ import lombok.*;
 @Builder
 @Data
 @AllArgsConstructor
-public class ChallengeAttempt {
+public class ChallengeAttemptAggregate {
     private Long id;
     private User user;
     private Challenge challenge;

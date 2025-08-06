@@ -4,14 +4,14 @@ import io.swagger.annotations.Api;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import microservices.book.multiplication.application.ports.input.command.CreateChallengeAttemptCommand1;
-import microservices.book.multiplication.infrastructure.adapters.input.rest.model.ChallengeAttemptResponse;
-import microservices.book.multiplication.application.ports.input.IChallengeService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import microservices.book.multiplication.application.dto.ChallengeDto;
+import microservices.book.multiplication.application.ports.mapper.ChallengeDtoMapper;
+import microservices.book.multiplication.application.ports.service.IChallengeAttemptCommandService;
+import microservices.book.multiplication.domain.model.ChallengeAttemptAggregate;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * This class provides a REST API to post the attempts from users.
@@ -24,11 +24,11 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(value = "Challenge Attempt Commands", description = "Challenge Attempt Commands API")
 @RequestMapping("/attempts")
 public class ChallengeAttemptCommandController {
-    private final IChallengeService challengeService;
+    private final IChallengeAttemptCommandService challengeAttemptCommandService;
 
     @PostMapping
-    ResponseEntity<ChallengeAttemptResponse> postResult(@RequestBody @Valid CreateChallengeAttemptCommand1 createChallengeAttemptCommand) {
-        // ChallengeAttemptRequest challengeAttemptRequest
-        return ResponseEntity.ok(challengeService.verifyAttempt(createChallengeAttemptCommand));
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public CompletableFuture<ChallengeAttemptAggregate> postResult(@RequestBody @Valid ChallengeDto challengeDto) {
+        return this.challengeAttemptCommandService.createChallengeAttempt(ChallengeDtoMapper.MAPPER.map(challengeDto), challengeDto.getUserAlias());
     }
 }
