@@ -1,6 +1,8 @@
 package microservices.book.multiplication.infrastructure.adapters.output.persistence.mapper;
 
 import microservices.book.multiplication.domain.model.ChallengeAttempt;
+import microservices.book.multiplication.domain.model.ChallengeAttemptAggregate;
+import microservices.book.multiplication.infrastructure.adapters.output.aggregate.ChallengeAttemptAxonAggregate;
 import microservices.book.multiplication.infrastructure.adapters.output.persistence.entity.ChallengeAttemptEntity;
 import org.mapstruct.Mapper;
 
@@ -12,7 +14,7 @@ public abstract class ChallengeAttemptEntityMapper {
 
     public static final ChallengeAttemptEntityMapper MAPPER = Mappers.getMapper(ChallengeAttemptEntityMapper.class);
 
-    public abstract ChallengeAttemptEntity map(ChallengeAttempt challengeAttempt);
+    public abstract ChallengeAttemptEntity map(ChallengeAttemptAxonAggregate challengeAttempt);
 
-    public abstract ChallengeAttempt map(ChallengeAttemptEntity challengeAttemptEntity);
+    public abstract ChallengeAttemptAggregate map(ChallengeAttemptEntity challengeAttemptEntity);
 }

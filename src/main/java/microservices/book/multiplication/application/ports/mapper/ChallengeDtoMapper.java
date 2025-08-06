@@ -11,8 +11,9 @@ import org.mapstruct.factory.Mappers;
 public abstract class ChallengeDtoMapper {
 
      public static final ChallengeDtoMapper MAPPER = Mappers.getMapper(ChallengeDtoMapper.class);
-     public abstract ChallengeDto map(Challenge challenge);
 
      @Mapping(target = "userAlias", ignore = true)
+     public abstract ChallengeDto map(Challenge challenge);
+
      public abstract Challenge map(ChallengeDto challengeDto);
 }

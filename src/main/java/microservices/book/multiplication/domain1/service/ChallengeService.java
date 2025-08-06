@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import microservices.book.multiplication.application.ports.input.command.CreateChallengeAttemptCommand1;
 import microservices.book.multiplication.domain.model.User;
 import microservices.book.multiplication.application.ports.input.IChallengeService;
-import microservices.book.multiplication.application.ports.input.mapper.ChallengeRequestMapper;
 import microservices.book.multiplication.infrastructure.adapters.input.rest.model.ChallengeAttemptResponse;
 import org.springframework.stereotype.Service;
 
