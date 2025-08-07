@@ -3,8 +3,8 @@ package microservices.book.multiplication.infrastructure.adapters.output.aggrega
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import microservices.book.multiplication.application.ports.input.command.CreateChallengeAttemptCommand;
-import microservices.book.multiplication.domain.event.ChallengeAttemptCreatedEvent;
+import microservices.book.multiplication.application.ports.input.command.CreateChallengeCommand;
+import microservices.book.multiplication.application.ports.output.event.ChallengeAttemptCreatedEvent;
 import microservices.book.multiplication.domain.model.User;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
@@ -39,7 +39,7 @@ public class ChallengeAttemptAxonAggregate {
      * @param command
      */
     @CommandHandler
-    public ChallengeAttemptAxonAggregate(CreateChallengeAttemptCommand command) {
+    public ChallengeAttemptAxonAggregate(CreateChallengeCommand command) {
         /**
          * boolean isCorrect = createChallengeAttemptCommand.challengeAttemptRequest().getGuess() ==
          *                 createChallengeAttemptCommand.challengeAttemptRequest().getFactorA() * createChallengeAttemptCommand.challengeAttemptRequest().getFactorB();

@@ -2,8 +2,8 @@ package microservices.book.multiplication.infrastructure.adapters.input.rest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import microservices.book.multiplication.application.ports.service.IChallengeGeneratorService;
 import microservices.book.multiplication.domain.model.Challenge;
-import microservices.book.multiplication.application.ports.input.IChallengeGeneratorService;
 import org.springframework.web.bind.annotation.*;
 
 /**

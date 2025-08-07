@@ -2,21 +2,18 @@ package microservices.book.multiplication.application.ports.input.command;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import microservices.book.multiplication.application.dto.UserDto;
-import microservices.book.multiplication.domain.model.User;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class CreateChallengeAttemptCommand extends BaseCommand<Long>{
-    private User user;
+public class CreateChallengeCommand1 extends BaseCommand<Long>{
     private int factorA;
     private int factorB;
     private int guess;
 
-    public CreateChallengeAttemptCommand(Long aggregateId, UserDto user, int factorA, int factorB) {
+    public CreateChallengeCommand1(Long aggregateId, int factorA, int factorB, int guess) {
         super(aggregateId);
-        this.user = user;
         this.factorA = factorA;
         this.factorB = factorB;
+        this.guess = guess;
     }
 }

@@ -20,8 +20,8 @@ import java.util.concurrent.CompletableFuture;
  */
 @Slf4j
 @RequiredArgsConstructor
-@RestController
 @Api(value = "Challenge Attempt Commands", description = "Challenge Attempt Commands API")
+@RestController
 @RequestMapping("/attempts")
 public class ChallengeAttemptCommandController {
     private final IChallengeAttemptCommandService challengeAttemptCommandService;

@@ -1,12 +1,10 @@
-package microservices.book.multiplication.domain.service;
+package microservices.book.multiplication.infrastructure.adapters.service;
 
+import microservices.book.multiplication.application.ports.service.IChallengeGeneratorService;
 import microservices.book.multiplication.domain.model.Challenge;
-import microservices.book.multiplication.application.ports.input.IChallengeGeneratorService;
-import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
-@Service
 public class ChallengeGeneratorService implements IChallengeGeneratorService {
     private final static int MINIMUM_FACTOR = 11;
     private final static int MAXIMUM_FACTOR = 100;
@@ -27,7 +25,7 @@ public class ChallengeGeneratorService implements IChallengeGeneratorService {
 
     @Override
     public Challenge randomChallenge() {
-        return new Challenge(next(), next());
+        return new Challenge(next(), next(), 0);
     }
 
     private int next() {
