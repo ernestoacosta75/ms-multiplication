@@ -17,3 +17,8 @@ server:
   error:
     include-message: always
     include-binding-errors: always
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
