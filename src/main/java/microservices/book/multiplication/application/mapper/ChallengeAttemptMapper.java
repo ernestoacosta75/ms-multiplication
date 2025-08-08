@@ -1,7 +1,7 @@
 package microservices.book.multiplication.application.mapper;
 
 import microservices.book.multiplication.application.dto.ChallengeAttemptResponseDto;
-import microservices.book.multiplication.domain.model.ChallengeAttemptAggregate;
+import microservices.book.multiplication.domain.model.challenge.ChallengeAttemptAggregate;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;

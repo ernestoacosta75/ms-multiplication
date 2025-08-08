@@ -5,9 +5,9 @@ import microservices.book.multiplication.application.dto.ChallengeAttemptRespons
 import microservices.book.multiplication.application.ports.input.IChallengeService;
 import microservices.book.multiplication.application.ports.output.IChallengeAttemptRepository;
 import microservices.book.multiplication.application.ports.output.IUserRepository;
-import microservices.book.multiplication.domain.model.Challenge;
-import microservices.book.multiplication.domain.model.ChallengeAttemptAggregate;
-import microservices.book.multiplication.domain.model.User;
+import microservices.book.multiplication.domain.model.challenge.Challenge;
+import microservices.book.multiplication.domain.model.challenge.ChallengeAttemptAggregate;
+import microservices.book.multiplication.domain.model.user.User;
 import microservices.book.multiplication.infrastructure.adapters.output.entity.ChallengeAttemptEntity;
 import microservices.book.multiplication.infrastructure.adapters.output.entity.UserEntity;
 import microservices.book.multiplication.infrastructure.adapters.output.mapper.ChallengeAttemptEntityMapper;

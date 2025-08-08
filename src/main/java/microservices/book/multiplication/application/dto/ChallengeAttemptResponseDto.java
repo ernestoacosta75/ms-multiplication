@@ -1,7 +1,7 @@
 package microservices.book.multiplication.application.dto;
 
 import lombok.*;
-import microservices.book.multiplication.domain.model.User;
+import microservices.book.multiplication.domain.model.user.User;
 
 @Builder
 @Getter

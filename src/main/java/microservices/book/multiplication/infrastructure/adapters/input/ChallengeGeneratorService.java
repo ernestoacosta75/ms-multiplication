@@ -1,6 +1,6 @@
 package microservices.book.multiplication.infrastructure.adapters.input;
 
-import microservices.book.multiplication.domain.model.Challenge;
+import microservices.book.multiplication.domain.model.challenge.Challenge;
 import microservices.book.multiplication.application.ports.input.IChallengeGeneratorService;
 import org.springframework.stereotype.Service;
 

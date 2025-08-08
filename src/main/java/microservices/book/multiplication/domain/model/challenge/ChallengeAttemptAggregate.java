@@ -1,4 +1,6 @@
-package microservices.book.multiplication.domain.model;
+package microservices.book.multiplication.domain.model.challenge;
+
+import microservices.book.multiplication.domain.model.user.User;
 
 import java.util.Objects;
 

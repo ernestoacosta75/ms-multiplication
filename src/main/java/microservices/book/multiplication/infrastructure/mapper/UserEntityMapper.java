@@ -1,6 +1,6 @@
 package microservices.book.multiplication.infrastructure.mapper;
 
-import microservices.book.multiplication.domain.model.User;
+import microservices.book.multiplication.domain.model.user.User;
 import microservices.book.multiplication.infrastructure.adapters.output.entity.UserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;

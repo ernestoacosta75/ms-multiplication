@@ -1,6 +1,6 @@
 package microservices.book.multiplication.application.ports.input;
 
-import microservices.book.multiplication.domain.model.Challenge;
+import microservices.book.multiplication.domain.model.challenge.Challenge;
 
 public interface IChallengeGeneratorService {
 

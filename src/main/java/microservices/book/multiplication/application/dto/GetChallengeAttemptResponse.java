@@ -3,7 +3,7 @@ package microservices.book.multiplication.application.dto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import microservices.book.multiplication.domain.model.User;
+import microservices.book.multiplication.domain.model.user.User;
 
 @Setter
 @Getter

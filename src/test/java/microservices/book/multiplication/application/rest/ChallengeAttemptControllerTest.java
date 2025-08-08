@@ -2,7 +2,7 @@ package microservices.book.multiplication.application.rest;
 
 import microservices.book.multiplication.application.dto.ChallengeAttemptRequestDto;
 import microservices.book.multiplication.application.dto.ChallengeAttemptResponseDto;
-import microservices.book.multiplication.domain.model.User;
+import microservices.book.multiplication.domain.model.user.User;
 import microservices.book.multiplication.application.ports.input.IChallengeService;
 import microservices.book.multiplication.infrastructure.adapters.output.entity.ChallengeAttemptEntity;
 import microservices.book.multiplication.infrastructure.adapters.output.entity.UserEntity;

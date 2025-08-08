@@ -2,7 +2,7 @@ package microservices.book.multiplication.infrastructure.adapters.output;
 
 import lombok.RequiredArgsConstructor;
 import microservices.book.multiplication.application.ports.output.IUserRepository;
-import microservices.book.multiplication.domain.model.User;
+import microservices.book.multiplication.domain.model.user.User;
 import microservices.book.multiplication.infrastructure.adapters.output.crud.IUserCrudRepository;
 import microservices.book.multiplication.infrastructure.adapters.output.entity.UserEntity;
 import microservices.book.multiplication.infrastructure.mapper.UserEntityMapper;

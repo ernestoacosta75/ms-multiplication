@@ -1,6 +1,6 @@
 package microservices.book.multiplication.application.ports.output;
 
-import microservices.book.multiplication.domain.model.User;
+import microservices.book.multiplication.domain.model.user.User;
 import microservices.book.multiplication.infrastructure.adapters.output.entity.UserEntity;
 
 import java.util.Optional;
