@@ -16,7 +16,7 @@ public class ChallengeAttemptRepository implements IChallengeAttemptRepository {
 
     @Override
     public List<ChallengeAttemptEntity> findTop10ByUserAliasOrderByIdDesc(String userAlias) {
-        return List.of();
+        return this.challengeAttemptCrudRepository.findTop10ByUserAliasOrderByIdDesc(userAlias);
     }
 
     @Override
