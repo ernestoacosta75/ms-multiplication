@@ -1,8 +1,8 @@
 package microservices.book.multiplication.infrastructure.adapters.output;
 
 import lombok.RequiredArgsConstructor;
+import microservices.book.multiplication.application.dto.UserDto;
 import microservices.book.multiplication.application.ports.output.IUserRepository;
-import microservices.book.multiplication.domain.model.user.User;
 import microservices.book.multiplication.infrastructure.adapters.output.crud.IUserCrudRepository;
 import microservices.book.multiplication.infrastructure.adapters.output.entity.UserEntity;
 import microservices.book.multiplication.infrastructure.mapper.UserEntityMapper;
@@ -17,8 +17,8 @@ public class UserRepository implements IUserRepository {
     private final IUserCrudRepository userCrudRepository;
 
     @Override
-    public UserEntity save(User user) {
-        var entity = this.userCrudRepository.save(UserEntityMapper.MAPPER.map(user));
+    public UserEntity save(UserDto userDto) {
+        var entity = this.userCrudRepository.save(UserEntityMapper.MAPPER.map(userDto));
         return entity;
     }
 

@@ -2,16 +2,17 @@ package microservices.book.multiplication.infrastructure.adapters.input;
 
 import microservices.book.multiplication.application.dto.ChallengeAttemptRequestDto;
 import microservices.book.multiplication.application.dto.ChallengeAttemptResponseDto;
+import microservices.book.multiplication.application.dto.UserDto;
+import microservices.book.multiplication.application.mapper.UserMapper;
 import microservices.book.multiplication.application.ports.input.IChallengeService;
 import microservices.book.multiplication.application.ports.output.IChallengeAttemptRepository;
 import microservices.book.multiplication.application.ports.output.IUserRepository;
 import microservices.book.multiplication.domain.model.challenge.Challenge;
 import microservices.book.multiplication.domain.model.challenge.ChallengeAttemptAggregate;
-import microservices.book.multiplication.domain.model.user.User;
 import microservices.book.multiplication.infrastructure.adapters.output.entity.ChallengeAttemptEntity;
 import microservices.book.multiplication.infrastructure.adapters.output.entity.UserEntity;
-import microservices.book.multiplication.infrastructure.adapters.output.mapper.ChallengeAttemptEntityMapper;
 import microservices.book.multiplication.infrastructure.config.AppConfig;
+import microservices.book.multiplication.infrastructure.mapper.ChallengeAttemptEntityMapper;
 import microservices.book.multiplication.infrastructure.mapper.UserEntityMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,10 +53,11 @@ class ChallengeServiceTest {
         // given
         ChallengeAttemptRequestDto attemptRequest = new ChallengeAttemptRequestDto(50, 60, "john_doe", 3000);
         UserEntity savedUserEntity = new UserEntity(1L, "john_doe");
+        var userDto = UserDto.builder().alias("john_doe").build();
 
         // when
         when(userRepository.findByAlias("john_doe")).thenReturn(Optional.empty());
-        when(userRepository.save(any(User.class))).thenReturn(savedUserEntity);
+        when(userRepository.save(any(UserDto.class))).thenReturn(savedUserEntity);
         ChallengeAttemptResponseDto resultAttempt = challengeService.verifyAttempt(attemptRequest);
 
         var aggregate = ChallengeAttemptAggregate.create(
@@ -66,7 +68,7 @@ class ChallengeServiceTest {
                 resultAttempt.isCorrect());
         // then
         then(resultAttempt.isCorrect()).isTrue();
-        verify(userRepository).save(new User(1L, "john_doe"));
+        verify(userRepository).save(any(UserDto.class)); //new User(1L, "john_doe")
         verify(challengeAttemptRepository)
                 .save(ChallengeAttemptEntityMapper.MAPPER.map(aggregate));
     }
@@ -86,14 +88,14 @@ class ChallengeServiceTest {
 
         var aggregate = ChallengeAttemptAggregate.create(
                 resultAttempt.getId(),
-                resultAttempt.getUser(),
+                UserMapper.MAPPER.map(existingUserEntity),
                 new Challenge(resultAttempt.getFactorA(), resultAttempt.getFactorB()),
                 resultAttempt.getResultAttempt(),
                 resultAttempt.isCorrect());
 
         // then
         then(resultAttempt.isCorrect()).isFalse();
-        then(resultAttempt.getUser()).isEqualTo(UserEntityMapper.MAPPER.map(existingUserEntity));
+        then(resultAttempt.getUser()).isEqualTo(UserMapper.MAPPER.map(existingUserEntity));
         verify(userRepository, never()).save(any());
         verify(challengeAttemptRepository).save(ChallengeAttemptEntityMapper.MAPPER.map(aggregate));
     }
@@ -108,7 +110,7 @@ class ChallengeServiceTest {
 
         // when
         when(userRepository.findByAlias("john_doe")).thenReturn(Optional.empty());
-        when(userRepository.save(any(User.class))).thenReturn(savedUserEntity);
+        when(userRepository.save(any(UserDto.class))).thenReturn(savedUserEntity);
         ChallengeAttemptResponseDto resultAttempt = challengeService.verifyAttempt(attemptRequest);
 
         // then

@@ -1,6 +1,6 @@
 package microservices.book.multiplication.infrastructure.config;
 
-import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
+import com.fasterxml.jackson.datatype.hibernate6.Hibernate6Module;
 import lombok.Setter;
 import microservices.book.multiplication.application.ports.output.IUserRepository;
 import microservices.book.multiplication.application.ports.output.IChallengeAttemptRepository;
@@ -23,8 +23,8 @@ public class AppConfig {
     private IUserCrudRepository userCrudRepository;
 
     @Bean
-    public Hibernate5Module hibernateModule() {
-        return new Hibernate5Module();
+    public Hibernate6Module hibernateModule() {
+        return new Hibernate6Module();
     }
 
     private IUserRepository userRepository() {

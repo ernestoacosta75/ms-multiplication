@@ -4,16 +4,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import microservices.book.multiplication.application.dto.ChallengeAttemptRequestDto;
 import microservices.book.multiplication.application.dto.ChallengeAttemptResponseDto;
+import microservices.book.multiplication.application.dto.UserDto;
 import microservices.book.multiplication.application.mapper.ChallengeMapper;
+import microservices.book.multiplication.application.mapper.UserMapper;
 import microservices.book.multiplication.application.ports.output.IChallengeAttemptRepository;
 import microservices.book.multiplication.application.ports.output.IUserRepository;
 import microservices.book.multiplication.domain.model.challenge.Challenge;
 import microservices.book.multiplication.domain.model.challenge.ChallengeAttemptAggregate;
 import microservices.book.multiplication.application.ports.input.IChallengeService;
-import microservices.book.multiplication.domain.model.user.User;
 import microservices.book.multiplication.infrastructure.adapters.output.entity.UserEntity;
 import microservices.book.multiplication.infrastructure.mapper.ChallengeAttemptEntityMapper;
-import microservices.book.multiplication.infrastructure.mapper.UserEntityMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +39,9 @@ public class ChallengeService implements IChallengeService {
                     log.info("Creating new user with alias {}",
                             challengeAttemptRequestDto.getUserAlias());
 
-                    return userRepository.save(new User(1L, challengeAttemptRequestDto.getUserAlias()));
+                    var userDto = UserDto.builder().alias(challengeAttemptRequestDto.getUserAlias()).build();
+                    var userEntity = userRepository.save(userDto);
+                    return userEntity;
                 });
 
         // Checking if attempt is correct
@@ -52,9 +54,9 @@ public class ChallengeService implements IChallengeService {
         ChallengeAttemptAggregate challengeAttemptAggregate =
                 ChallengeAttemptAggregate.create(
                         null,
-                        UserEntityMapper.MAPPER.map(user),
+                        UserMapper.MAPPER.map(user),
                         new Challenge(challengeAttemptRequestDto.getFactorA(), challengeAttemptRequestDto.getFactorB()),
-                        0,
+                        challengeAttemptRequestDto.getGuess(),
                         isCorrect
                 );
 

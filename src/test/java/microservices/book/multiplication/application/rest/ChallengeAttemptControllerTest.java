@@ -6,7 +6,7 @@ import microservices.book.multiplication.domain.model.user.User;
 import microservices.book.multiplication.application.ports.input.IChallengeService;
 import microservices.book.multiplication.infrastructure.adapters.output.entity.ChallengeAttemptEntity;
 import microservices.book.multiplication.infrastructure.adapters.output.entity.UserEntity;
-import microservices.book.multiplication.infrastructure.adapters.output.mapper.ChallengeAttemptEntityMapper;
+import microservices.book.multiplication.infrastructure.mapper.ChallengeAttemptEntityMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
