@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import microservices.book.multiplication.application.dto.ChallengeAttemptRequestDto;
 import microservices.book.multiplication.application.dto.ChallengeAttemptResponseDto;
 import microservices.book.multiplication.application.dto.UserDto;
-import microservices.book.multiplication.application.mapper.ChallengeMapper;
 import microservices.book.multiplication.application.mapper.UserMapper;
 import microservices.book.multiplication.application.ports.output.IChallengeAttemptRepository;
 import microservices.book.multiplication.application.ports.output.IUserRepository;
@@ -14,7 +13,6 @@ import microservices.book.multiplication.domain.model.challenge.ChallengeAttempt
 import microservices.book.multiplication.application.ports.input.IChallengeService;
 import microservices.book.multiplication.infrastructure.adapters.output.entity.UserEntity;
 import microservices.book.multiplication.infrastructure.mapper.ChallengeAttemptEntityMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,43 +22,28 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChallengeService implements IChallengeService {
 
-    @Autowired
     private final IUserRepository userRepository;
-
-    @Autowired
     private final IChallengeAttemptRepository challengeAttemptRepository;
 
     @Override
-    public ChallengeAttemptResponseDto verifyAttempt(ChallengeAttemptRequestDto challengeAttemptRequestDto) {
-        // Checking if the user already exists for that alias, otherwise create it
+    public ChallengeAttemptResponseDto verifyAttempt(ChallengeAttemptRequestDto request) {
+
         UserEntity user = userRepository
-                .findByAlias(challengeAttemptRequestDto.getUserAlias())
-                .orElseGet(() -> {
-                    log.info("Creating new user with alias {}",
-                            challengeAttemptRequestDto.getUserAlias());
+                .findByAlias(request.getUserAlias())
+                .orElseGet(() -> createUser(request.getUserAlias()));
 
-                    var userDto = UserDto.builder().alias(challengeAttemptRequestDto.getUserAlias()).build();
-                    var userEntity = userRepository.save(userDto);
-                    return userEntity;
-                });
-
-        // Checking if attempt is correct
-        boolean isCorrect = challengeAttemptRequestDto.getGuess() ==
-                challengeAttemptRequestDto.getFactorA() * challengeAttemptRequestDto.getFactorB();
-
-        // Building the domain object. Null id for now
-        var challengeAttempt = ChallengeMapper.MAPPER.map(challengeAttemptRequestDto);
+        boolean isCorrect = request.getGuess() ==
+                request.getFactorA() * request.getFactorB();
 
         ChallengeAttemptAggregate challengeAttemptAggregate =
                 ChallengeAttemptAggregate.create(
                         null,
                         UserMapper.MAPPER.map(user),
-                        new Challenge(challengeAttemptRequestDto.getFactorA(), challengeAttemptRequestDto.getFactorB()),
-                        challengeAttemptRequestDto.getGuess(),
+                        new Challenge(request.getFactorA(), request.getFactorB()),
+                        request.getGuess(),
                         isCorrect
                 );
 
-        // Storing the challenge attempt
         var entity = challengeAttemptRepository.save(ChallengeAttemptEntityMapper.MAPPER.map(challengeAttemptAggregate));
         return ChallengeAttemptEntityMapper.MAPPER.map(entity);
     }
@@ -69,5 +52,11 @@ public class ChallengeService implements IChallengeService {
     public List<ChallengeAttemptResponseDto> getStatsForUser(String userAlias) {
         return ChallengeAttemptEntityMapper.MAPPER.map(
                 challengeAttemptRepository.findTop10ByUserAliasOrderByIdDesc(userAlias));
+    }
+
+    private UserEntity createUser(String userAlias) {
+        log.info("Creating new user with alias {}", userAlias);
+        var userDto = UserDto.builder().alias(userAlias).build();
+        return userRepository.save(userDto);
     }
 }
