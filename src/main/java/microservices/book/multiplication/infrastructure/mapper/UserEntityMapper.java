@@ -7,8 +7,9 @@ import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public abstract class UserEntityMapper {
-    public static final UserEntityMapper MAPPER = Mappers.getMapper(UserEntityMapper.class);
-    public abstract UserEntity map(UserDto userDto);
-    public abstract UserDto map(UserEntity userEntity);
+public interface UserEntityMapper {
+    UserEntityMapper MAPPER = Mappers.getMapper(UserEntityMapper.class);
+
+    UserEntity map(UserDto userDto);
+    UserDto map(UserEntity userEntity);
 }
