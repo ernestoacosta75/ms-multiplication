@@ -30,3 +30,7 @@ logging:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     org.hibernate.type: TRACE
+service:
+  gamification:
+    host: http://localhost:8081
+
