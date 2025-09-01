@@ -509,3 +509,63 @@ they run on different ports, so they are considered different origins.
 To fix this, we’re going to enable **cross-origin
 resource sharing** (CORS), **a security policy that can be enabled on the server side to
 allow our front end to work with our REST API from a different origin**.
+
+# The Data Layer
+
+### SQL vs. NoSQL
+**NoSQL databases** are better for big volumes of
+records since these databases **are distributed**. We can deploy multiple nodes (or
+instances), so they allow for good performance at writing data, reading it, or both. The
+price we pay is that these databases follow the **CAP theorem**.
+
+When we store data in a distributed way, we have to choose only **two
+of the availability, consistency, and partition tolerance guarantees**. We normally want
+partition tolerance since network errors will simply happen, so we should be able to
+cope with them. Therefore, most of the time we have to choose between making the data
+available as much time as possible or making it consistent.
+
+**Relational databases (SQL)** follow the **ACID guarantees**:
+**atomicity** (transactions either succeed or fail as a whole unit), **consistency** (data always
+transitions between valid states), **isolation** (ensures that concurrency doesn’t cause side effects), and **durability** (after a transaction the state is persisted even in the event
+of a system failure). Those are great features, but to ensure them, these databases can’t
+deal properly with horizontal scalability (multiple distributed nodes), meaning they
+don’t scale that well.
+
+Analyze carefully what your data requirements are:
+
+* How are you planning to query the data? 
+* Do you need high availability?
+* Are you writing millions of records? 
+* Do you need very fast readings? 
+
+### H2, Hibernate and JPA
+
+* We’ll use the Spring Boot JPA annotations and integrations, so we keep our code decoupled from Hibernate
+  specifics.
+* On the implementation side, Hibernate takes care of all the logic to map our objects to database entities.
+* Hibernate supports multiple SQL dialects for different databases, and the H2 dialect is one of them.
+* Spring Boot autoconfiguration sets up H2 and Hibernate for us, but we can also customize behaviors.
+
+This loose coupling between specifications and implementations gives us a big
+  advantage: changing to a different database engine would be seamless since it’s
+  abstracted by Hibernate and Spring Boot configuration.
+
+### Spring Boot Data JPA
+The Spring Framework has multiple modules available to work with databases, grouped
+into the Spring Data family: 
+* JDBC
+* Cassandra
+* Hadoop
+* Elasticsearch, etc. 
+
+One of them is **Spring Data JPA**, which **abstracts access to databases** using the Java Persistence API in a
+Spring-based programming style. The starter for it is **spring-boot-starter-data-jpa** module.
+
+#### Entities
+Setting the fetch type to LAZY in the @ManyToOne annotation, the queries to retrieve those fields will be executed  only when
+we try to access them. Otherwise, with fecth type as EAGER, the user data gets collected with the attempt.
+
+This works because Hibernate configures proxy classes for the entity classes.
+These proxy classes extended ours; that's why we shouldn't declare them **final** if we want this mechanism to work.
+Hibernate will pass a proxy object that triggers the query to fetch the data needed only when the accessor (getter)
+is used for the first time.
