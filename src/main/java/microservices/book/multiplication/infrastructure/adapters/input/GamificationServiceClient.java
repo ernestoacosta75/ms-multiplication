@@ -42,6 +42,7 @@ public class GamificationServiceClient implements IGamificationServiceClient {
                     challengeAttemptAggregate.getUser().getId(),
                     challengeAttemptAggregate.getUser().getAlias());
 
+            // Using the postForEntity() method to send a POST request to the Gamification microservice.
             ResponseEntity<String> responseEntity = restTemplate.postForEntity(
                     gamificationHostUrl + "/attempts",
                     challengeSolvedDto,

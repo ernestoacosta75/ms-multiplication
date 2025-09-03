@@ -5,6 +5,7 @@ import microservices.book.multiplication.application.dto.ChallengeAttemptRespons
 import microservices.book.multiplication.application.dto.UserDto;
 import microservices.book.multiplication.application.mapper.UserMapper;
 import microservices.book.multiplication.application.ports.input.IChallengeService;
+import microservices.book.multiplication.application.ports.input.IGamificationServiceClient;
 import microservices.book.multiplication.application.ports.output.IChallengeAttemptRepository;
 import microservices.book.multiplication.application.ports.output.IUserRepository;
 import microservices.book.multiplication.domain.model.challenge.Challenge;
@@ -41,9 +42,12 @@ class ChallengeServiceTest {
     @Mock
     private IChallengeAttemptRepository challengeAttemptRepository;
 
+    @Mock
+    private IGamificationServiceClient gamificationServiceClient;
+
     @BeforeEach
     void setUp() {
-        challengeService = new ChallengeService(userRepository, challengeAttemptRepository);
+        challengeService = new ChallengeService(userRepository, challengeAttemptRepository, gamificationServiceClient);
         given(challengeAttemptRepository.save(any()))
                 .will(returnsFirstArg());
     }
@@ -71,6 +75,7 @@ class ChallengeServiceTest {
         verify(userRepository).save(any(UserDto.class)); //new User(1L, "john_doe")
         verify(challengeAttemptRepository)
                 .save(ChallengeAttemptEntityMapper.MAPPER.map(aggregate));
+        verify(gamificationServiceClient).sendAttempt(aggregate);
     }
 
     @Test
