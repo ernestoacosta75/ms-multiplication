@@ -49,7 +49,7 @@ public class ChallengeService implements IChallengeService {
         var entity = challengeAttemptRepository.save(ChallengeAttemptEntityMapper.MAPPER.map(challengeAttemptAggregate));
 
         // Sending the attempt to the Gamification microservice
-        gamificationServiceClient.sendAttempt(challengeAttemptAggregate);
+        gamificationServiceClient.sendAttempt(entity);
 
         return ChallengeAttemptEntityMapper.MAPPER.map(entity);
     }

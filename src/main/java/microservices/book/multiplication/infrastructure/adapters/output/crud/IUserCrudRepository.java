@@ -9,5 +9,5 @@ import java.util.Optional;
 
 public interface IUserCrudRepository extends CrudRepository<UserEntity, Long> {
     Optional<UserEntity> findByAlias(final String alias);
-    List<User> findAllById(final List<Long> ids);
+    List<UserEntity> findAllById(Iterable<Long> ids);
 }

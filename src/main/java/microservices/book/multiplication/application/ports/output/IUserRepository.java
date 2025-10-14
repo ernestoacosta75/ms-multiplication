@@ -13,5 +13,5 @@ import java.util.Optional;
 public interface IUserRepository {
     UserEntity save(UserDto userDto);
     Optional<UserEntity> findByAlias(final String alias);
-    List<User> findAllById(final List<Long> ids);
+    List<UserEntity> findAllById(final List<Long> ids);
 }

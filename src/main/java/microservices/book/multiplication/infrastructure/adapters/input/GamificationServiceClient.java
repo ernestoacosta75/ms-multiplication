@@ -3,7 +3,7 @@ package microservices.book.multiplication.infrastructure.adapters.input;
 import lombok.extern.slf4j.Slf4j;
 import microservices.book.multiplication.application.dto.ChallengeSolvedDto;
 import microservices.book.multiplication.application.ports.input.IGamificationServiceClient;
-import microservices.book.multiplication.domain.model.challenge.ChallengeAttemptAggregate;
+import microservices.book.multiplication.infrastructure.adapters.output.entity.ChallengeAttemptEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
@@ -32,15 +32,15 @@ public class GamificationServiceClient implements IGamificationServiceClient {
     }
 
     @Override
-    public boolean sendAttempt(ChallengeAttemptAggregate challengeAttemptAggregate) {
+    public boolean sendAttempt(ChallengeAttemptEntity challengeAttemptEntity) {
         try {
             ChallengeSolvedDto challengeSolvedDto = new ChallengeSolvedDto(
-                    challengeAttemptAggregate.getId(),
-                    challengeAttemptAggregate.isCorrect(),
-                    challengeAttemptAggregate.getChallenge().getFactorA(),
-                    challengeAttemptAggregate.getChallenge().getFactorB(),
-                    challengeAttemptAggregate.getUser().getId(),
-                    challengeAttemptAggregate.getUser().getAlias());
+                    challengeAttemptEntity.getId(),
+                    challengeAttemptEntity.isCorrect(),
+                    challengeAttemptEntity.getFactorA(),
+                    challengeAttemptEntity.getFactorB(),
+                    challengeAttemptEntity.getUser().getId(),
+                    challengeAttemptEntity.getUser().getAlias());
 
             // Using the postForEntity() method to send a POST request to the Gamification microservice.
             ResponseEntity<String> responseEntity = restTemplate.postForEntity(
