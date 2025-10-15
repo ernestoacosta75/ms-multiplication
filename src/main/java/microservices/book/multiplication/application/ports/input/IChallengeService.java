@@ -20,4 +20,6 @@ public interface IChallengeService {
      * @return a list of the last 10 {@link ChallengeAttemptResponseDto}
      */
     List<ChallengeAttemptResponseDto> getStatsForUser(String userAlias);
+
+    List<ChallengeAttemptResponseDto> getAllAttempts();
 }

@@ -9,5 +9,6 @@ import java.util.List;
  */
 public interface IChallengeAttemptRepository {
     List<ChallengeAttemptEntity> findTop10ByUserAliasOrderByIdDesc(String userAlias);
+    List<ChallengeAttemptEntity> getAllChallenges();
     ChallengeAttemptEntity save(ChallengeAttemptEntity entity);
 }

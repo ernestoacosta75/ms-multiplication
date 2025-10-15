@@ -28,6 +28,11 @@ public class ChallengeAttemptController {
         return ResponseEntity.ok(challengeService.getStatsForUser(alias));
     }
 
+    @GetMapping("/all")
+    ResponseEntity<List<ChallengeAttemptResponseDto>> getAllChallenges() {
+        return ResponseEntity.ok(challengeService.getAllAttempts());
+    }
+
     @PostMapping
     ResponseEntity<ChallengeAttemptResponseDto> postResult(@RequestBody @Valid ChallengeAttemptRequestDto challengeAttemptRequestDto) {
         return ResponseEntity.ok(challengeService.verifyAttempt(challengeAttemptRequestDto));

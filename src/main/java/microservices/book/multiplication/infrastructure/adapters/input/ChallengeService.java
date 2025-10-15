@@ -60,6 +60,12 @@ public class ChallengeService implements IChallengeService {
                 challengeAttemptRepository.findTop10ByUserAliasOrderByIdDesc(userAlias));
     }
 
+    @Override
+    public List<ChallengeAttemptResponseDto> getAllAttempts() {
+        return ChallengeAttemptEntityMapper.MAPPER.map(
+                challengeAttemptRepository.getAllChallenges());
+    }
+
     private UserEntity createUser(String userAlias) {
         log.info("Creating new user with alias {}", userAlias);
         var userDto = UserDto.builder().alias(userAlias).build();

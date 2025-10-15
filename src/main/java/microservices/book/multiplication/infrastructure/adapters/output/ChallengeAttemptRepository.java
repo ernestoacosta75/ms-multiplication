@@ -20,6 +20,11 @@ public class ChallengeAttemptRepository implements IChallengeAttemptRepository {
     }
 
     @Override
+    public List<ChallengeAttemptEntity> getAllChallenges() {
+        return this.challengeAttemptCrudRepository.getAllChallenges();
+    }
+
+    @Override
     public ChallengeAttemptEntity save(ChallengeAttemptEntity entity) {
         return this.challengeAttemptCrudRepository.save(entity);
     }
