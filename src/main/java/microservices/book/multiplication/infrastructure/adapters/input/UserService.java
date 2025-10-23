@@ -17,6 +17,13 @@ public class UserService implements IUserService {
     private final IUserRepository userRepository;
 
     @Override
+    public List<UserDto> findAllUsers() {
+        return userRepository.findAll().stream()
+                .map(UserEntityMapper.MAPPER::map)
+                .toList();
+    }
+
+    @Override
     public List<UserDto> findAllById(List<Long> ids) {
         log.info("Getting users with ids {}", ids);
         var x = userRepository.findAllById(ids).stream()

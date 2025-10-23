@@ -18,6 +18,12 @@ import java.util.List;
 public class UserController {
     private final IUserService userService;
 
+    @GetMapping()
+    public List<UserDto> getAllUsers() {
+        log.info("Getting all users");
+        return userService.findAllUsers();
+    }
+
     @GetMapping("/{idList}")
     public List<UserDto> getUsers(@PathVariable final List<Long> idList) {
         log.info("Getting users with ids {}", idList);

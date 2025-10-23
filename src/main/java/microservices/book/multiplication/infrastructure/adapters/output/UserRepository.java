@@ -30,6 +30,11 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
+    public List<UserEntity> findAll() {
+        return (List<UserEntity>) userCrudRepository.findAll();
+    }
+
+    @Override
     public List<UserEntity> findAllById(List<Long> ids) {
         return userCrudRepository.findAllById(ids);
     }
