@@ -16,7 +16,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect  # Forces dialect
@@ -27,12 +26,16 @@ server:
     include-message: always
     include-binding-errors: always
 
+amqp:
+  exchange:
+    attempts: attempts.topic
+
 logging:
   level:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     org.hibernate.type: TRACE
-service:
-  gamification:
-    host: http://localhost:8081
+    org.springframework.amqp.rabbit.core.RabbitAdmin: DEBUG
+
+
 

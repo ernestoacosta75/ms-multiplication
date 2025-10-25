@@ -8,7 +8,7 @@ import lombok.Value;
  * when a multiplication challenge is solved.
  */
 @Value
-public class ChallengeSolvedDto {
+public class ChallengeSolvedEvent {
     long attemptId;
     boolean correct;
     int factorA;
