@@ -6,8 +6,8 @@ import microservices.book.multiplication.application.dto.ChallengeAttemptRequest
 import microservices.book.multiplication.application.dto.ChallengeAttemptResponseDto;
 import microservices.book.multiplication.application.dto.UserDto;
 import microservices.book.multiplication.application.mapper.UserMapper;
-import microservices.book.multiplication.application.ports.input.IGamificationServiceClient;
 import microservices.book.multiplication.application.ports.output.IChallengeAttemptRepository;
+import microservices.book.multiplication.application.ports.output.IChallengeEventPubService;
 import microservices.book.multiplication.application.ports.output.IUserRepository;
 import microservices.book.multiplication.domain.model.challenge.Challenge;
 import microservices.book.multiplication.domain.model.challenge.ChallengeAttemptAggregate;
@@ -25,7 +25,7 @@ public class ChallengeService implements IChallengeService {
 
     private final IUserRepository userRepository;
     private final IChallengeAttemptRepository challengeAttemptRepository;
-    private final IGamificationServiceClient gamificationServiceClient;
+    private final IChallengeEventPubService challengeEventPubService;
 
     @Override
     public ChallengeAttemptResponseDto verifyAttempt(ChallengeAttemptRequestDto request) {
@@ -48,8 +48,8 @@ public class ChallengeService implements IChallengeService {
 
         var entity = challengeAttemptRepository.save(ChallengeAttemptEntityMapper.MAPPER.map(challengeAttemptAggregate));
 
-        // Sending the attempt to the Gamification microservice
-        gamificationServiceClient.sendAttempt(entity);
+        // Publishing an event to notify potentially interested subscribers
+        challengeEventPubService.challengeSolved(entity);
 
         return ChallengeAttemptEntityMapper.MAPPER.map(entity);
     }

@@ -23,7 +23,7 @@ public class ChallengeEventPubService implements IChallengeEventPubService {
     }
 
     @Override
-    public void challengeSolvedEvent(ChallengeAttemptEntity challengeAttemptEntity) {
+    public void challengeSolved(ChallengeAttemptEntity challengeAttemptEntity) {
         ChallengeSolvedEvent event = buildEvent(challengeAttemptEntity);
 
         // Routing key is 'attempt.correct' or 'attempt.wrong' based on the correctness of the attempt

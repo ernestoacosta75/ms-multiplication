@@ -6,5 +6,5 @@ import microservices.book.multiplication.infrastructure.adapters.output.entity.C
  * This interface is the contract to communicate with the message broker.
  */
 public interface IChallengeEventPubService {
-    void challengeSolvedEvent(final ChallengeAttemptEntity challengeAttemptEntity);
+    void challengeSolved(final ChallengeAttemptEntity challengeAttemptEntity);
 }
