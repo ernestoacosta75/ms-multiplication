@@ -24,3 +24,12 @@
    3.1. **Inbound Adapters**: REST controllers, CLI commands, or other entry points that implement inbound ports.
    
    3.2. **Outbound Adapters**: Repositories, REST clients, messaging implementations, etc, that implement outbound ports.
+
+# The core definition of "Input" vs "Output"
+
+In Hexagonal Architecture, the terms "Input" and "Output" are defined based on the perspective of the core domain:
+
+**Term**           | **Functionality**
+-------------------|-------------------
+Input (Driving)    | Anything that **starts a use case** or **drives the core logic**.
+Output (Driven)    | Anything that the application core **calls upon** to store data, or send notifications after a use case is finished.       
