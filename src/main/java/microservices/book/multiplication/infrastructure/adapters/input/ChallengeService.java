@@ -15,6 +15,7 @@ import microservices.book.multiplication.application.ports.input.IChallengeServi
 import microservices.book.multiplication.infrastructure.adapters.output.entity.UserEntity;
 import microservices.book.multiplication.infrastructure.mapper.ChallengeAttemptEntityMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class ChallengeService implements IChallengeService {
     private final IChallengeAttemptRepository challengeAttemptRepository;
     private final IChallengeEventPubService challengeEventPubService;
 
+    @Transactional
     @Override
     public ChallengeAttemptResponseDto verifyAttempt(ChallengeAttemptRequestDto request) {
 

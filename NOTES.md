@@ -574,7 +574,7 @@ is used for the first time.
 
 RabbitMQ includes some standard plugins, but not all of them are enabled by default. As an extra step, we will enable
 the management plugin, which give us access to a Web UI, and an API to monitor and manage the broker. From the **sbin** folder
-inside the broker's installation (ex.: C:\Program Files\RabbitMQ Server\rabbitmq_server-3.8.9\sbin), run:
+inside the broker's installation (ex.: cd rabbitmq_server-4.1.4\sbin), run:
 
 ```rabbitmq-plugins.bat enable rabbitmq_management
 ```
