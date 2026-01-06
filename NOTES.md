@@ -569,3 +569,15 @@ This works because Hibernate configures proxy classes for the entity classes.
 These proxy classes extended ours; that's why we shouldn't declare them **final** if we want this mechanism to work.
 Hibernate will pass a proxy object that triggers the query to fetch the data needed only when the accessor (getter)
 is used for the first time.
+
+## Running RabbitMQ
+
+RabbitMQ includes some standard plugins, but not all of them are enabled by default. As an extra step, we will enable
+the management plugin, which give us access to a Web UI, and an API to monitor and manage the broker. From the **sbin** folder
+inside the broker's installation (ex.: cd rabbitmq_server-4.1.4\sbin), run:
+
+```rabbitmq-plugins.bat enable rabbitmq_management
+```
+
+Navigate to **http://localhost:15672** and see a login page. Since we’re running locally, we can use the default
+username and password values: **guest/guest**. 

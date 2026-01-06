@@ -5,7 +5,8 @@ spring:
     virtual:
       enabled: true
   datasource:
-    url: jdbc:h2:file:C:/temp/multiplication;DB_CLOSE_ON_EXIT=FALSE
+    # Enabling the server mode in H2 to connect from multiple instances
+    url: jdbc:h2:file:C:/temp/multiplication;AUTO_SERVER=TRUE;
     driver-class-name: org.h2.Driver
     username: sa
     password: ""
@@ -16,23 +17,26 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect  # Forces dialect
-cors:
-  allowed-origins: http://localhost:4200
+#cors:
+#  allowed-origins: http://localhost:4200
 server:
   error:
     include-message: always
     include-binding-errors: always
+
+amqp:
+  exchange:
+    attempts: attempts.topic
 
 logging:
   level:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     org.hibernate.type: TRACE
-service:
-  gamification:
-    host: http://localhost:8081
+    org.springframework.amqp.rabbit.core.RabbitAdmin: DEBUG
+
+
 

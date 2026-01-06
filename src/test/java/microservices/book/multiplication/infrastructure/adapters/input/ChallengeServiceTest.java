@@ -5,8 +5,8 @@ import microservices.book.multiplication.application.dto.ChallengeAttemptRespons
 import microservices.book.multiplication.application.dto.UserDto;
 import microservices.book.multiplication.application.mapper.UserMapper;
 import microservices.book.multiplication.application.ports.input.IChallengeService;
-import microservices.book.multiplication.application.ports.input.IGamificationServiceClient;
 import microservices.book.multiplication.application.ports.output.IChallengeAttemptRepository;
+import microservices.book.multiplication.application.ports.output.IChallengeEventPubService;
 import microservices.book.multiplication.application.ports.output.IUserRepository;
 import microservices.book.multiplication.domain.model.challenge.Challenge;
 import microservices.book.multiplication.domain.model.challenge.ChallengeAttemptAggregate;
@@ -14,7 +14,6 @@ import microservices.book.multiplication.infrastructure.adapters.output.entity.C
 import microservices.book.multiplication.infrastructure.adapters.output.entity.UserEntity;
 import microservices.book.multiplication.infrastructure.config.AppConfig;
 import microservices.book.multiplication.infrastructure.mapper.ChallengeAttemptEntityMapper;
-import microservices.book.multiplication.infrastructure.mapper.UserEntityMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -43,11 +42,11 @@ class ChallengeServiceTest {
     private IChallengeAttemptRepository challengeAttemptRepository;
 
     @Mock
-    private IGamificationServiceClient gamificationServiceClient;
+    private IChallengeEventPubService challengeEventPubService;
 
     @BeforeEach
     void setUp() {
-        challengeService = new ChallengeService(userRepository, challengeAttemptRepository, gamificationServiceClient);
+        challengeService = new ChallengeService(userRepository, challengeAttemptRepository, challengeEventPubService);
         given(challengeAttemptRepository.save(any()))
                 .will(returnsFirstArg());
     }
@@ -75,7 +74,6 @@ class ChallengeServiceTest {
         verify(userRepository).save(any(UserDto.class)); //new User(1L, "john_doe")
         verify(challengeAttemptRepository)
                 .save(ChallengeAttemptEntityMapper.MAPPER.map(aggregate));
-        // verify(gamificationServiceClient).sendAttempt(aggregate);
     }
 
     @Test

@@ -25,8 +25,8 @@ public class UserController {
     }
 
     @GetMapping("/{idList}")
-    public List<UserDto> getUsers(@PathVariable final List<Long> idList) {
-        log.info("Getting users with ids {}", idList);
+    public List<UserDto> getUsersByIdList(@PathVariable final List<Long> idList) {
+        log.info("Resolving aliases for users {}", idList);
         return userService.findAllById(idList);
     }
 }
